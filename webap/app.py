@@ -32,14 +32,15 @@ if page == "Home":
                 st.write("Columns:", data_info["columns"])
 
                 summary_resp = requests.get(f"{BASE_URL}/")
-                if resp.ok:
-                    data = resp.json()
-                    st.write("Columns:", data["columns"])
-                    st.write("Shape:", data["shape"])
-                    # st.write("Null counts:", data["null_counts"])
-                    st.write("Duplicate rows:", data["duplicates"])
-                    st.write("Data")
-                    st.dataframe(pd.DataFrame(data["head"]))
+                if summary_resp.ok:
+                    summary_data = summary_resp.json()
+                    st.subheader("Data Summary")
+                    st.write("Columns:", summary_data["columns"])
+                    st.write("Shape:", summary_data["shape"])
+                    st.write("Null counts:", summary_data["null_counts"])
+                    st.write("Duplicate rows:", summary_data["duplicates"])
+                    st.subheader("Preview Data")
+                    st.dataframe(pd.DataFrame(summary_data["head"]))
                 else:
                     st.error("Failed to fetch data summary.")
             else:
