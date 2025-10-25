@@ -1,7 +1,7 @@
 fastapi==0.111.1
 uvicorn==0.23.2
 pandas==2.2.3
-numpy==2.3.4
+numpy==1.26.5
 scikit-learn==1.2.2
 matplotlib==3.8.0
 seaborn==0.12.2
