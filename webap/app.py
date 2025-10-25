@@ -36,7 +36,7 @@ if page == "Home":
                     data = resp.json()
                     st.write("Columns:", data["columns"])
                     st.write("Shape:", data["shape"])
-                    st.write("Null counts:", data["null_counts"])
+                    # st.write("Null counts:", data["null_counts"])
                     st.write("Duplicate rows:", data["duplicates"])
                     st.write("Data")
                     st.dataframe(pd.DataFrame(data["head"]))
