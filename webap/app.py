@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://kailo.onrender.com"
 
 st.set_page_config(page_title="DataReveal Dashboard", layout="wide")
 
