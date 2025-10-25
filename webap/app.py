@@ -18,17 +18,33 @@ page = st.sidebar.selectbox("Go to", ["Home", "Preview Data", "Clean Data", "Sca
 if page == "Home":
     st.subheader("Home")
     st.write("Welcome to DataReveal! Fetching summary from FastAPI...")
-    resp = requests.get(f"{BASE_URL}/")
-    if resp.ok:
-        data = resp.json()
-        st.write("Columns:", data["columns"])
-        st.write("Shape:", data["shape"])
-        st.write("Null counts:", data["null_counts"])
-        st.write("Duplicate rows:", data["duplicates"])
-        st.write("Data")
-        st.dataframe(pd.DataFrame(data["head"]))
-    else:
-        st.error("Failed to fetch data summary.")
+    st.title("DataReveal: Upload Your CSV")
+    
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    if uploaded_file is not None:
+            files = {"file": (uploaded_file.name, uploaded_file, "text/csv")}
+            resp = requests.post(f"{BASE_URL}/upload_csv", files=files)
+
+            if resp.ok:
+                st.success("File uploaded successfully!")
+                data_info = resp.json()
+                st.write("Shape:", data_info["shape"])
+                st.write("Columns:", data_info["columns"])
+
+                summary_resp = requests.get(f"{BASE_URL}/")
+                if resp.ok:
+                    data = resp.json()
+                    st.write("Columns:", data["columns"])
+                    st.write("Shape:", data["shape"])
+                    st.write("Null counts:", data["null_counts"])
+                    st.write("Duplicate rows:", data["duplicates"])
+                    st.write("Data")
+                    st.dataframe(pd.DataFrame(data["head"]))
+                else:
+                    st.error("Failed to fetch data summary.")
+            else:
+                st.error("Failed to upload file.")
+    
 
 # -----------------------------------
 elif page == "Preview Data":

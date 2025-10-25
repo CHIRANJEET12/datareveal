@@ -1,9 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
+import pandas as pd
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from model.dataload import load_data, data_summary, clean_data, scale
-import pandas as pd
 import numpy as np
 
 app = FastAPI(title="DataReveal API", description="Backend for data loading and analysis", version="1.0")
@@ -13,6 +13,23 @@ def startUp_event():
     global df
     df = load_data()
     print("✅ Data loaded successfully!")
+
+
+@app.post("/upload_csv")
+async def upload_csv(file: UploadFile = File(...)):
+    global df 
+    if not file.filename.endswith(".csv"):
+        return {"error": "Please upload a CSV file."}
+    
+    contents = await file.read()
+    import io
+    df = pd.read_csv(io.BytesIO(contents))
+    
+    return {
+        "message": f"File '{file.filename}' uploaded successfully!",
+        "shape": list(df.shape),
+        "columns": list(df.columns)
+    }
 
 @app.get("/")
 def home():
